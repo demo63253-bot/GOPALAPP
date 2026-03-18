@@ -1,0 +1,19 @@
+async function loadJobs() {
+    const res = await fetch('/api/jobs');
+    const jobs = await res.json();
+    const list = document.getElementById('list');
+    list.innerHTML = jobs.map(j => `<div class="card"><strong>${j.name}</strong> - Status: Open</div>`).join('');
+}
+
+async function addJob() {
+    const name = document.getElementById('cust').value;
+    if(!name) return;
+    await fetch('/api/jobs', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name: name, date: new Date() })
+    });
+    document.getElementById('cust').value = '';
+    loadJobs();
+}
+loadJobs(); // Run on startup
